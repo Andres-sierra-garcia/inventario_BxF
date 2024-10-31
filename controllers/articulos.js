@@ -1,23 +1,102 @@
-import ArticulosModel from '../models/articulos.js'; 
+import ArticulosModel from "../models/articulos.js";
 
-
-const postArticulos = async (req, res)=>{
+const postArticulos = async (req, res) => {
     try {
-        const {nombre, precio, stock, imagen, categoria, estado}= req.body;
+        const { nombre, precio, stock, imagen, categoria, estado } = req.body;
         const articulos = new ArticulosModel({
             nombre,
             precio,
             stock,
             imagen,
             categoria,
-            estado
+            estado,
         });
         await articulos.save();
-        res.json({articulos});
+        res.json({ articulos });
     } catch (error) {
-        res.status(400).json({error:"No se pudo registrar el articulo"})    
+        res.status(400).json({ error: "No se pudo registrar el articulo" });
+        console.log(error);
+    }
+};
+
+const putArticulos = async (req, res)=>{
+    try {
+        const {id}=req.params;
+        const {nombre, precio, stock, imagen, categoria, estado}= req.body
+        const articulo = await ArticulosModel.findByIdAndUpdate(id,{nombre, precio, stock, imagen, categoria, estado},{new:true})
+        res.json({articulo})
+    } catch (error) {
+        res.status(400).json({error:"los datos no han sido modificados correctamente"})
         console.log(error);
     }
 }
 
-export  {postArticulos}
+const getArticulos= async (req, res)=>{
+   try {
+    const articulos= await ArticulosModel.find()
+    res.json({articulos})
+   } catch (error) {
+    res.status(400).json({error:"hubo un fallo al traer todos los articulos"})
+    console.log(error);
+   }
+}
+
+
+const getArticulo=async (req,res)=>{
+    try {
+        const {id}=req.params
+        const articulo= await ArticulosModel.findById(id)
+        res.json({articulo})
+    } catch (error) {
+        res.status(400).json({error:"error al traer el articulo"})
+        console.log(error);
+    }
+}
+
+
+const getArticulosActivos= async (req,res)=>{
+    try {
+        const articulos = await ArticulosModel.find({estado:1})
+        res.json({articulos})
+    } catch (error) {
+        res.status(400).json({error:"error al listar todos los articulos activos"})
+        console.log(error);
+    }
+
+}
+
+const getArticulosInactivos= async (req,res)=>{
+    try {
+        const articulos = await ArticulosModel.find({estado:0})
+        res.json({articulos})
+    } catch (error) {
+        res.status(400).json({error:"error al listar todos los articulos inactivos"})
+        console.log(error);
+    }
+}
+
+
+const putActivar = async (req, res)=>{
+    try {
+        const {id}=req.params
+        const articulo= await ArticulosModel.findByIdAndUpdate(id,{estado:1},{new:true})
+        res.json({articulo})
+    } catch (error) {
+        res.status(400).json({error:"error al activar el articulo"})    
+        console.log(error);
+    }
+}
+
+const putInactivar = async (req, res)=>{
+    try {
+        const {id}=req.params
+        const articulo= await ArticulosModel.findByIdAndUpdate(id,{estado:0},{new:true})
+        res.json({articulo})
+    } catch (error) {
+        res.status(400).json({error:"error al activar el articulo"})    
+        console.log(error);
+    }
+}
+
+
+export { postArticulos ,putArticulos, getArticulos,getArticulo,getArticulosActivos,getArticulosInactivos,putActivar,putInactivar};

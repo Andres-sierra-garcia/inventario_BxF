@@ -5,7 +5,7 @@ const articulosSchema = new mongoose.Schema({
     stock:{type:Number, required:true},
     imagen:{type:String, required:true},
     categoria:{type:String, required:true},
-    estado:{type:Number, required:true, default:1}
+    estado:{type:Number, required:true, default:1} //1:activo 0:inactivo
 },{
     timestamps:true
 });
