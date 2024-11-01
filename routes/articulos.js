@@ -1,6 +1,5 @@
 import Router from 'router'
 import {postArticulos,putArticulos,getArticulos,getArticulo,getArticulosActivos,getArticulosInactivos,putActivar,putInactivar} from '../controllers/articulos.js'  
-import { get } from 'mongoose';
 const router =  Router();
 
 //registrar articulos
@@ -26,5 +25,7 @@ router.put("/activar/:id",putActivar)
 
 //inactivar articulo
 router.put("/inactivar/:id",putInactivar)
+
+//de aqui para abajo son las peticiones especificas
 
 export default router

@@ -16,5 +16,6 @@ const movimientosSchema = new mongoose.Schema({
 {
     timestamps:true
 })
-
-export {movimientosSchema}
+ 
+const movimientosModel = mongoose.model("movimientos", movimientosSchema)
+export default movimientosModel

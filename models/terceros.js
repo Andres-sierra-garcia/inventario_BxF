@@ -11,4 +11,5 @@ const tercerosSchema= new mongoose.Schema({
     timestamps:true
 })
 
-export {tercerosSchema}
+const tercerosModel = mongoose.model("terceros",tercerosSchema)
+export default tercerosModel  
