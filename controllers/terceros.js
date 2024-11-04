@@ -86,11 +86,30 @@ const putActivarInactivar = async (req, res)=>{
     }
 }
 
+
+const getTercerosTipo = async  (req, res)=>{
+    try {
+        const {tipo}  = req.params
+        if(tipo == "cliente"){
+            const  clientes  = await tercerosModel.find({tipo:1})
+            res.json({clientes})
+        }
+        else if(tipo  == "proveedor"){
+            const proveedores = await tercerosModel.find({tipo:2})
+            res.json({proveedores})
+        }
+    } catch (error) {
+        res.status(400).json({error:"erro al realizar la busqueda"})
+    }
+}
+
+
 export  {
     postTerceros,
     putTerceros,
     getTerceros,
     getTercero,
     getActivosinactivos,
-    putActivarInactivar
+    putActivarInactivar,
+    getTercerosTipo
 }

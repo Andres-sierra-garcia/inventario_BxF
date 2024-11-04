@@ -17,7 +17,7 @@ app.use("/api/terceros",terceros)
 dotenv.config()
 
 app.listen(process.env.PORT,()=>{
-    console.log("Escuachando en el puerto"+ process.env.PORT);
+    console.log("Escuchando en el puerto"+ process.env.PORT);
     mongoose.connect(process.env.CNX_MONGO)
     .then(()=>console.log("conected!"))
     .catch((error)=>console.log(error))

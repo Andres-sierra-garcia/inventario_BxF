@@ -1,25 +1,42 @@
-import Router from 'router'
-import { postMovimientos, putMovimientos, getMovimientos, getMovimiento, getActivosinactivos,putActivarInactivar } from '../controllers/movimientos.js'   
-const router = Router()
-
+import Router from "router";
+import {
+    postMovimientos,
+    putMovimientos,
+    getMovimientos,
+    getMovimiento,
+    getActivosinactivos,
+    putActivarInactivar,
+    getMovimientoTipo,
+    getMovimientosFechas
+} from "../controllers/movimientos.js";
+const router = Router();
 
 //registrar un nuevo movimiento
-router.post("/",postMovimientos)
+router.post("/", postMovimientos);
 
 //actualizar un movimiento
-router.put("/actualizar/:ide",putMovimientos)
+router.put("/actualizar/:ide", putMovimientos);
 
 //traer todos los movimientos
-router.get("/movimientos",getMovimientos)
+router.get("/movimientos", getMovimientos);
 
 //traer un movimiento por id
-router.get("/movimiento/:id", getMovimiento)
+router.get("/movimiento/:id", getMovimiento);
 
 //traer todos los movimientos activos
-router.get("/movimientos/:accion",getActivosinactivos)
+router.get("/movimientos/:accion", getActivosinactivos);
 
 //activar o inactivar un movimiento
-router.put("/:accion/:id",putActivarInactivar)
+router.put("/:accion/:id", putActivarInactivar);
 
 
-export default router
+
+//de aqui para abajo son las peticiones especificas
+
+//traer movimientos por tipo
+router.get("/tipo/:tipo",getMovimientoTipo)
+
+//traer movimientos entre fechas
+router.get("/fechas/:fechaInicio/:fechaFin",getMovimientosFechas)
+
+export default router;

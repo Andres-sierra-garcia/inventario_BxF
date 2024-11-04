@@ -8,7 +8,7 @@ const movimientosSchema = new mongoose.Schema({
         cantidad:{type:Number, required: true},
         precio:{type:Number, required: true}
     }],
-    valor:{type:Number, required: true},
+    valor:{type:Number, required: true}, 
     iva:{type:Number, required: true},
     total:{type:Number, required: true},
     estado:{type:Number, required: true, default:1}
