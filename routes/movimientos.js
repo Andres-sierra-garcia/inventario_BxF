@@ -1,4 +1,8 @@
 import Router from "router";
+import { check } from "express-validator";
+import validarCampos from "../middlewares/validarCampos.js";
+import helperMovimientos from "../helpers/movimientos.js";
+const router = Router();
 import {
     postMovimientos,
     putMovimientos,
@@ -9,25 +13,48 @@ import {
     getMovimientoTipo,
     getMovimientosFechas
 } from "../controllers/movimientos.js";
-const router = Router();
 
 //registrar un nuevo movimiento
-router.post("/", postMovimientos);
+router.post("/",[
+    check("tipo","el tipo debe ser un numero").isNumeric(),
+    check("numeroFactura","la factura debe ser un texto").isString(),
+    check("fecha","el formato de la fecha es incorrecto").isString(),
+    check("articulos","articulos debe ser un array").isArray(),
+    check("articulos.*.id","el id no es valido").isMongoId(),
+    check("articulos.*.id","el id no existe").custom(helperMovimientos.validarIdArticulo),
+    check("articulos.*.cantidad","cantidad debe ser un numero").isNumeric(),
+    check("valor","debe ser un valor numerico").isNumeric(),
+    check("total","debe ser un valor numerico").isNumeric(),
+    check("estado","el estado debe ser 0 o 1").optional().isInt({min:0, max:1}),
+    validarCampos
+], postMovimientos);
 
 //actualizar un movimiento
-router.put("/actualizar/:ide", putMovimientos);
+router.put("/actualizar/:ide",[
+    check("ide","el id no es valido").isMongoId(),
+    check("ide","el id no existe").custom(helperMovimientos.validarId),
+    validarCampos
+],putMovimientos);
 
 //traer todos los movimientos
 router.get("/movimientos", getMovimientos);
 
 //traer un movimiento por id
-router.get("/movimiento/:id", getMovimiento);
+router.get("/movimiento/:id",[
+    check("id","el id no es valido").isMongoId(),
+    check("id","el id no existe").custom(helperMovimientos.validarId),
+    validarCampos
+], getMovimiento);
 
 //traer todos los movimientos activos
 router.get("/movimientos/:accion", getActivosinactivos);
 
 //activar o inactivar un movimiento
-router.put("/:accion/:id", putActivarInactivar);
+router.put("/:accion/:id",[
+    check("id","el id no es valido").isMongoId(),
+    check("id","el id no existe").custom(helperMovimientos.validarId),
+    validarCampos
+], putActivarInactivar);
 
 
 
@@ -37,6 +64,10 @@ router.put("/:accion/:id", putActivarInactivar);
 router.get("/tipo/:tipo",getMovimientoTipo)
 
 //traer movimientos entre fechas
-router.get("/fechas/:fechaInicio/:fechaFin",getMovimientosFechas)
+router.get("/fechas/:fechaInicio/:fechaFin",[
+    check("fechaInicio","la fecha no es valida debe ser algo como esto '2024-05-01'").isDate(),
+    check("fechaFin","la fecha no es valida debe ser algo como esto '2024-05-01'").isDate(),
+    validarCampos
+],getMovimientosFechas)
 
 export default router;
