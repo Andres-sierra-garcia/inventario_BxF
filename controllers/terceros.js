@@ -1,10 +1,14 @@
 import tercerosModel from "../models/terceros.js";
+import { generarJWT } from "../middlewares/validarjwt.js";
+import bcrypt from 'bcrypt'
 
 const postTerceros = async (req,res)=>{
     try {
-        const {nombre, identificacion, direccion, telefono, tipo,  estado}=req.body
+        const {nombre,contraseña, identificacion, direccion, telefono, tipo,  estado}=req.body
+        const contraseñaEncriptada = bcrypt.hashSync(contraseña, 10)
         const tercero = new tercerosModel({
             nombre,
+            contraseña:contraseñaEncriptada,
             identificacion,
             direccion,
             telefono, 
@@ -21,9 +25,9 @@ const postTerceros = async (req,res)=>{
 
 const putTerceros = async (req,res)=>{
     try {
-        const {nombre, identificacion, direccion, telefono, tipo,  estado}=req.body
+        const {nombre,contraseña, identificacion, direccion, telefono, tipo,  estado}=req.body
         const {id}= req.params
-        const tercero = await tercerosModel.findByIdAndUpdate(id,{nombre,identificacion, direccion, telefono, tipo,  estado},{new:true})
+        const tercero = await tercerosModel.findByIdAndUpdate(id,{nombre, contraseña, identificacion, direccion, telefono, tipo,  estado},{new:true})
         res.json({tercero})
     } catch (error) {
         res.status(400).json({error:"parece que hubo un error  al actualizar el tercero"})
@@ -104,6 +108,38 @@ const getTercerosTipo = async  (req, res)=>{
 }
 
 
+const loginTerceros = async (req, res) => {
+    const { usuario, contraseña } = req.body;
+    try {
+        const tercero = await tercerosModel.findOne({nombre:usuario});
+        console.log(tercero);
+        
+        if (!tercero) {
+            return res.status(400).json({ msg: "tercero / nombre incorrecto"});
+        }
+        if (tercero.estado === "0") {
+            return res.status(400).json({
+                msg: "tercero inactivo",
+            });
+        }
+        const validPassword = bcrypt.compareSync(contraseña, tercero.contraseña);// tengo  que crear un campo para contraseña y hacer la parte de guardarla encriptado en la bd
+        if (!validPassword) {
+            return res.status(400).json({
+                msg: "Holder / password incorrectos",
+            });
+        } 
+        const token = await generarJWT(tercero._id);
+        res.json({
+            tercero,
+            token,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: "algo salio mal hable con el webMaster" });
+    }
+};
+
+
 export  {
     postTerceros,
     putTerceros,
@@ -111,5 +147,6 @@ export  {
     getTercero,
     getActivosinactivos,
     putActivarInactivar,
-    getTercerosTipo
+    getTercerosTipo,
+    loginTerceros
 }
