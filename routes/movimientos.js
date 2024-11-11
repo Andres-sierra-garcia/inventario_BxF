@@ -1,6 +1,7 @@
 import Router from "router";
 import { check } from "express-validator";
 import validarCampos from "../middlewares/validarCampos.js";
+import { validarJWT } from "../middlewares/validarjwt.js";
 import helperMovimientos from "../helpers/movimientos.js";
 const router = Router();
 import {
@@ -16,6 +17,7 @@ import {
 
 //registrar un nuevo movimiento
 router.post("/",[
+    validarJWT,
     check("tipo","el tipo debe ser un numero").isNumeric(),
     check("numeroFactura","la factura debe ser un texto").isString(),
     check("fecha","el formato de la fecha es incorrecto").isString(),
@@ -31,26 +33,33 @@ router.post("/",[
 
 //actualizar un movimiento
 router.put("/actualizar/:ide",[
+    validarJWT,
     check("ide","el id no es valido").isMongoId(),
     check("ide","el id no existe").custom(helperMovimientos.validarId),
     validarCampos
 ],putMovimientos);
 
 //traer todos los movimientos
-router.get("/movimientos", getMovimientos);
+router.get("/movimientos",[
+    validarJWT,
+], getMovimientos);
 
 //traer un movimiento por id
 router.get("/movimiento/:id",[
+    validarJWT,
     check("id","el id no es valido").isMongoId(),
     check("id","el id no existe").custom(helperMovimientos.validarId),
     validarCampos
 ], getMovimiento);
 
 //traer todos los movimientos activos
-router.get("/movimientos/:accion", getActivosinactivos);
+router.get("/movimientos/:accion",[
+    validarJWT
+], getActivosinactivos);
 
 //activar o inactivar un movimiento
 router.put("/:accion/:id",[
+    validarJWT,
     check("id","el id no es valido").isMongoId(),
     check("id","el id no existe").custom(helperMovimientos.validarId),
     validarCampos
@@ -61,10 +70,13 @@ router.put("/:accion/:id",[
 //de aqui para abajo son las peticiones especificas
 
 //traer movimientos por tipo
-router.get("/tipo/:tipo",getMovimientoTipo)
+router.get("/tipo/:tipo",[
+    validarJWT
+],getMovimientoTipo)
 
 //traer movimientos entre fechas
 router.get("/fechas/:fechaInicio/:fechaFin",[
+    validarJWT,
     check("fechaInicio","la fecha no es valida debe ser algo como esto '2024-05-01'").isDate(),
     check("fechaFin","la fecha no es valida debe ser algo como esto '2024-05-01'").isDate(),
     validarCampos
