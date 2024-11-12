@@ -1,5 +1,5 @@
-import tercerosModel from '../models/terceros.js';
 import jwt from 'jsonwebtoken'
+import usuariosModel from '../models/usuarios.js';
 
 const generarJWT = (uid) => {
     return new Promise((resolve, reject) => {
@@ -32,7 +32,7 @@ const validarJWT = async (req, res, next)=>{
     }
     try {
         const {uid} = jwt.verify(token, process.env.SECRETORPRIVATEKEY)
-        let user = await tercerosModel.findById(uid)
+        let user = await usuariosModel.findById(uid)
         console.log(uid);
         if(!user){
             return res.status(401).json({

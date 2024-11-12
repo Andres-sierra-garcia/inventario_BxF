@@ -1,11 +1,9 @@
 import tercerosModel from "../models/terceros.js";
-import { generarJWT } from "../middlewares/validarjwt.js";
-import bcrypt from 'bcrypt'
+
 
 const postTerceros = async (req,res)=>{
     try {
         const {nombre,contraseña, identificacion, direccion, telefono, tipo,  estado}=req.body
-        const contraseñaEncriptada = bcrypt.hashSync(contraseña, 10)
         const tercero = new tercerosModel({
             nombre,
             contraseña:contraseñaEncriptada,
@@ -108,36 +106,6 @@ const getTercerosTipo = async  (req, res)=>{
 }
 
 
-const loginTerceros = async (req, res) => {
-    const { usuario, contraseña } = req.body;
-    try {
-        const tercero = await tercerosModel.findOne({nombre:usuario});
-        console.log(tercero);
-        
-        if (!tercero) {
-            return res.status(400).json({ msg: "tercero / nombre incorrecto"});
-        }
-        if (tercero.estado === "0") {
-            return res.status(400).json({
-                msg: "tercero inactivo",
-            });
-        }
-        const validPassword = bcrypt.compareSync(contraseña, tercero.contraseña);// tengo  que crear un campo para contraseña y hacer la parte de guardarla encriptado en la bd
-        if (!validPassword) {
-            return res.status(400).json({
-                msg: "Holder / password incorrectos",
-            });
-        } 
-        const token = await generarJWT(tercero._id);
-        res.json({
-            tercero,
-            token,
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ msg: "algo salio mal hable con el webMaster" });
-    }
-};
 
 
 export  {
@@ -148,5 +116,4 @@ export  {
     getActivosinactivos,
     putActivarInactivar,
     getTercerosTipo,
-    loginTerceros
 }

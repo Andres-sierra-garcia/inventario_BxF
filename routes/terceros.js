@@ -11,7 +11,6 @@ import {
     getActivosinactivos,
     putActivarInactivar,
     getTercerosTipo,
-    loginTerceros
 } from "../controllers/terceros.js";
 const router = Router();
 
@@ -31,21 +30,16 @@ router.post("/",[
 
 //actualizar un tercero
 router.put("/tercero/:id",[
-    validarJWT,
     check("id","el id no es valido").isMongoId(),
     check("id","el id no existe en la base de datos").custom(helperTerceros.validarId),
     validarCampos
 ], putTerceros);
 
 //traer todos los terceros
-router.get("/terceros",[
-    validarJWT,
-    validarCampos
-], getTerceros);
+router.get("/terceros", getTerceros);
 
 //traer tercero por id
 router.get("/tercero/:id",[
-    validarJWT,
     check("id","el id no es valido").isMongoId(),
     check("id","el id no existe en la base de datos").custom(helperTerceros.validarId),
     validarCampos
@@ -53,14 +47,12 @@ router.get("/tercero/:id",[
 
 //traer activos o inactivos
 router.get("/terceros/:accion",[
-    validarJWT,
     check("accion","debe digitar 'activos o inactivos'").isIn(["activos","inactivos"]),
     validarCampos
 ], getActivosinactivos);
 
 //activar o inactivar un tercero
 router.put("/:accion/:id",[
-    validarJWT,
     check("accion","debe digitar activar o inactivar").isIn(["activar", "inactivar"]),
     check("id","el id no es valido").isMongoId(),
     check("id","el id no existe en la bd").custom(helperTerceros.validarId),
@@ -71,13 +63,11 @@ router.put("/:accion/:id",[
 
 //de aqui para abajo son las peticiones especificas
 router.get("/tipos/:tipo",[
-    validarJWT,
     check("tipo","el tipo debe ser o cliente o proveedor").isIn(["cliente", "proveedor"]),
     validarCampos
 ], getTercerosTipo)
 
 
-//logearse
-router.post("/login",loginTerceros)
+
 
 export default router;

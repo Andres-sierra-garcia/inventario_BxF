@@ -2,7 +2,6 @@ import mongoose from 'mongoose'
 
 const tercerosSchema= new mongoose.Schema({
     nombre:{type:String, required:true},
-    contraseña:{type:String , required:true},
     identificacion:{type:Number, required:true},
     direccion:{type:String, required:true},
     telefono:{type:Number, required:true},
