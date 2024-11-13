@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 
@@ -10,6 +11,7 @@ import usuarios from './routes/usuarios.js'
  
 const app= express()
 app.use(express.json())
+app.use(cors())
 app.use("/api/articulos", articulos)
 app.use("/api/categorias",categorias)
 app.use("/api/movimientos",movimientos)
