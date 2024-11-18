@@ -1,14 +1,16 @@
 import ArticulosModel from "../models/articulos.js";
+import categoriasModel from "../models/categorias.js";
 
 const postArticulos = async (req, res) => {
     try {
         const { nombre, precio, stock, imagen, categoria, estado } = req.body;
+        const Categoria = await categoriasModel.findOne({nombre:categoria})
         const articulos = new ArticulosModel({
             nombre,
             precio,
             stock,
             imagen,
-            categoria,
+            categoria:Categoria._id,
             estado,
         });
         await articulos.save();

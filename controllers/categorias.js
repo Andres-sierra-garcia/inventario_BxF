@@ -3,8 +3,9 @@ import Categorias from '../models/categorias.js'
 
 const postCategorias = async (req, res) => {
     try {
-        const { descripcion, estado } = req.body
+        const { nombre,  descripcion, estado } = req.body
         const categoria = new Categorias({
+            nombre,
             descripcion,
             estado
         })
@@ -19,8 +20,8 @@ const postCategorias = async (req, res) => {
 const putCategorias =async (req,res)=>{
     try {
         const {id}=req.params
-    const {descripcion, estado}=req.body
-    const categoria = await Categorias.findByIdAndUpdate(id,{descripcion,estado},{new:true})
+    const {nombre, descripcion, estado}=req.body
+    const categoria = await Categorias.findByIdAndUpdate(id, { nombre, descripcion,estado},{new:true})
     res.json({categoria})
     } catch (error) {
         res.status(400).json({error:"hubo un error al actualizar la categoria"})
