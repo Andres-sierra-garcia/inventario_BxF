@@ -41,7 +41,7 @@ const putArticulos = async (req, res) => {
 
 const getArticulos = async (req, res) => {
     try {
-        const articulos = await ArticulosModel.find();
+        const articulos = await ArticulosModel.find().populate("categoria");
         res.json({ articulos });
     } catch (error) {
         res
