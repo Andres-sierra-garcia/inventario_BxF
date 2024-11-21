@@ -19,7 +19,7 @@ import {
 router.post("/",[
     validarJWT,
     check("descripcion","es necesaria una descripcion de la categoria").notEmpty(),
-    check("estado","el estado debe 0 o 1").optional().isInt({min:0, max:1}),
+    check("estado","el estado debe ser 0 o 1").optional().isInt({min:0, max:1}),
     validarCampos   
 ], postCategorias);
 
