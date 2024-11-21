@@ -3,13 +3,13 @@ import tercerosModel from "../models/terceros.js";
 
 const postTerceros = async (req,res)=>{
     try {
-        const {nombre,contraseña, identificacion, direccion, telefono, tipo,  estado}=req.body
+        const {nombre,imagen, identificacion, direccion, telefono, tipo,  estado}=req.body
         const tercero = new tercerosModel({
             nombre,
-            contraseña:contraseñaEncriptada,
             identificacion,
             direccion,
             telefono, 
+            imagen,
             tipo,
             estado
         })
@@ -23,9 +23,9 @@ const postTerceros = async (req,res)=>{
 
 const putTerceros = async (req,res)=>{
     try {
-        const {nombre,contraseña, identificacion, direccion, telefono, tipo,  estado}=req.body
+        const {nombre, identificacion, direccion, telefono, imagen, tipo,  estado}=req.body
         const {id}= req.params
-        const tercero = await tercerosModel.findByIdAndUpdate(id,{nombre, contraseña, identificacion, direccion, telefono, tipo,  estado},{new:true})
+        const tercero = await tercerosModel.findByIdAndUpdate(id,{nombre, identificacion, direccion, telefono,imagen, tipo,  estado},{new:true})
         res.json({tercero})
     } catch (error) {
         res.status(400).json({error:"parece que hubo un error  al actualizar el tercero"})
