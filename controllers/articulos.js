@@ -4,13 +4,12 @@ import categoriasModel from "../models/categorias.js";
 const postArticulos = async (req, res) => {
     try {
         const { nombre, precio, stock, imagen, categoria, estado } = req.body;
-        const Categoria = await categoriasModel.findOne({nombre:categoria})
         const articulos = new ArticulosModel({
             nombre,
             precio,
             stock,
             imagen,
-            categoria:Categoria._id,
+            categoria, //lo que llega aqui es un id 
             estado,
         });
         await articulos.save();
@@ -54,7 +53,7 @@ const getArticulos = async (req, res) => {
 const getArticulo = async (req, res) => {
     try {
         const { id } = req.params;
-        const articulo = await ArticulosModel.findById(id);
+        const articulo = await ArticulosModel.findById(id).populate("categoria");
         res.json({ articulo });
     } catch (error) {
         res.status(400).json({ error: "error al traer el articulo" });
