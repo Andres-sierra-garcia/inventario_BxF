@@ -123,11 +123,11 @@ const getMovimientoTipo = async (req, res) => {
             const salidas = await movimientosModel.find({ tipo: 2 })
             res.json({ salidas })
         }
-        else if (tipo == "devolucion Entrada" || tipo == 3) {
+        else if (tipo == "devolucionEntrada" || tipo == 3) {
             const devolucionesEntrada = await movimientosModel.find({ tipo: 3 })
             res.json({ devolucionesEntrada })
         }
-        else if (tipo == "devolucion salida" || tipo == 4) {
+        else if (tipo == "devolucionSalida" || tipo == 4) {
             const devolucionesSalida = await movimientosModel.find({ tipo: 4 })
             res.json({ devolucionesSalida })
         }
